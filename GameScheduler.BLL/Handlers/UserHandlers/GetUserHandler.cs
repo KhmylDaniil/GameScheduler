@@ -19,6 +19,7 @@ namespace GameScheduler.BLL.Handlers.UserHandlers
 
             return await filter.Select(x => new GetUserResponse
             {
+                Id = x.Id,
                 Name = x.Name,
                 RegistrationDateTime = x.CreatedOn,
                 Role = Enum.GetName(x.RoleType)

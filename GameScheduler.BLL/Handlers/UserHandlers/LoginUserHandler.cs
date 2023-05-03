@@ -41,7 +41,7 @@ namespace GameScheduler.BLL.Handlers.UserHandlers
 
             var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, existingUser.Name.ToString()),
+                    new Claim(ClaimTypes.Name, existingUser.Id.ToString()),
                     new Claim(ClaimTypes.Role, Enum.GetName(existingUser.RoleType))
                 };
 

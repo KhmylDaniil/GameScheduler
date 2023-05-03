@@ -1,4 +1,5 @@
 ﻿using GameScheduler.BLL.Exceptions;
+using GameScheduler.BLL.Helpers;
 using GameScheduler.BLL.Models.UserModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace GameScheduler.MVC.Controllers
 
         public IActionResult Index() => View();
 
-
         public IActionResult Register() => View();
 
         [HttpPost]
@@ -20,7 +20,7 @@ namespace GameScheduler.MVC.Controllers
         {
             try
             {
-                await _mediator.Send(request ?? throw new ArgumentNullException(nameof(request)), cancellationToken);
+                await _mediator.SendValidated(request, cancellationToken);
 
                 await _mediator.Send(new LoginUserCommand() { Name = request.Name, Password = request.Password }, cancellationToken);
 
@@ -34,10 +34,7 @@ namespace GameScheduler.MVC.Controllers
             catch (Exception ex) { return RedirectToErrorPage<LoginController>(ex); }
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -45,7 +42,7 @@ namespace GameScheduler.MVC.Controllers
         {
             try
             {
-                await _mediator.Send(request ?? throw new ArgumentNullException(nameof(request)), cancellationToken);
+                await _mediator.SendValidated(request, cancellationToken);
 
                 return RedirectToAction("Index", "Home");
             }
