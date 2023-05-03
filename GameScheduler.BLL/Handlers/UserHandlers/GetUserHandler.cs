@@ -1,12 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameScheduler.BLL.Abstractions;
+using GameScheduler.BLL.Models.UserModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameScheduler.BLL.Handlers.UserHandlers
 {
-    internal class GetUserHandler
+    public class GetUserHandler : BaseHandler<GetUserQuery, IEnumerable<GetUserResponse>>
     {
+        public GetUserHandler(IAppDbContext appDbContext, IAuthorizationService authorizationService) : base(appDbContext, authorizationService)
+        {
+        }
+
+        public async override Task<IEnumerable<GetUserResponse>> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        {
+            _authorizationService.AuthorizationCheck(Constants.RoleType.Admin);
+
+            var filter = _appDbContext.Users
+                .Where(u => request.Name == null || u.Name.Contains(request.Name, StringComparison.InvariantCultureIgnoreCase));
+
+            return await filter.Select(x => new GetUserResponse
+            {
+                Name = x.Name,
+                RegistrationDateTime = x.CreatedOn,
+                Role = Enum.GetName(x.RoleType)
+            }).ToListAsync(cancellationToken);
+        }
     }
 }

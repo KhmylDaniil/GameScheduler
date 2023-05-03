@@ -3,6 +3,8 @@ using GameScheduler.MVC;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.ConfigureSerilog();
+
 Startup.ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
