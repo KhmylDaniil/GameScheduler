@@ -14,8 +14,14 @@ namespace GameScheduler.BLL.Handlers.UserHandlers
 {
     public class EditUserHandler : BaseHandler<EditUserCommand, Unit>
     {
-        public EditUserHandler(IAppDbContext appDbContext, IAuthorizationService authorizationService) : base(appDbContext, authorizationService)
+        private readonly IPasswordHasher _passwordHasher;
+        public EditUserHandler(
+            IAppDbContext appDbContext,
+            IAuthorizationService authorizationService,
+            IPasswordHasher passwordHasher)
+            : base(appDbContext, authorizationService)
         {
+            _passwordHasher = passwordHasher;
         }
 
         public async override Task<Unit> Handle(EditUserCommand request, CancellationToken cancellationToken)
@@ -32,6 +38,9 @@ namespace GameScheduler.BLL.Handlers.UserHandlers
 
             if (request.SwitchRole)
                 user.RoleType = user.RoleType == Constants.RoleType.Admin ? Constants.RoleType.User : Constants.RoleType.Admin;
+
+            if (!string.IsNullOrEmpty(request.SetNewPassword))
+                user.PasswordHash = _passwordHasher.Hash(request.SetNewPassword);
 
             await _appDbContext.SaveChangesAsync(cancellationToken);
             return Unit.Value;

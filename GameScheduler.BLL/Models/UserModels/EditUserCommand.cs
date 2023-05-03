@@ -11,5 +11,7 @@ namespace GameScheduler.BLL.Models.UserModels
         public string Name { get; set; }
 
         public bool SwitchRole { get; set; }
+
+        public string? SetNewPassword { get; set; }
     }
 }

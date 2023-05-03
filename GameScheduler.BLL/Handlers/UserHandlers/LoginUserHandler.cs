@@ -37,7 +37,7 @@ namespace GameScheduler.BLL.Handlers.UserHandlers
                 (request.Password, existingUser.PasswordHash);
 
             if (!isPasswordCorrect)
-                throw new ApplicationSystemNullException<LoginUserHandler>(nameof(isPasswordCorrect));
+                throw new ApplicationSystemBaseException("Неверный пароль.");
 
             var claims = new List<Claim>
                 {
