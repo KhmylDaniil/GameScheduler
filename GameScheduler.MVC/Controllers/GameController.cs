@@ -7,6 +7,7 @@ using GameScheduler.MVC.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace GameScheduler.MVC.Controllers
 {
@@ -15,7 +16,7 @@ namespace GameScheduler.MVC.Controllers
     {
         private readonly IMapper _mapper;
 
-        public GameController(IMediator mediator, IMapper mapper) : base(mediator)
+        public GameController(IMediator mediator, IMapper mapper, IMemoryCache memoryCache) : base(mediator)
         {
             _mapper = mapper;
         }

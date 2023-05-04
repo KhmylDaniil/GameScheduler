@@ -23,8 +23,6 @@ namespace GameScheduler.MVC
             services.AddBLLServices(configuration);
 
             services.AddAutoMapper(typeof(Program));
-
-            services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromSeconds(600));
         }
     }
 }

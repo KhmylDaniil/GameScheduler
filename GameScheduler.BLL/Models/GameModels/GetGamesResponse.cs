@@ -1,11 +1,14 @@
-﻿namespace GameScheduler.BLL.Models.GameModels
+﻿
+namespace GameScheduler.BLL.Models.GameModels
 {
     public class GetGamesResponse
     {
-        public Guid Id { get; set; }
+        public List<GetGamesResponseItem> Items { get; set; }
 
-        public string Name { get; set; }
+        public GetGamesQuery History { get; set; }
 
-        public DateTime DateTime { get; set; }
+        public bool NextPageExist { get; set; }
+
+        public bool PreviousPageExist { get; set; }
     }
 }

@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameScheduler.BLL.Handlers.GameHandlers
 {
-    public class GetGamesHandler : BaseHandler<GetGamesQuery, IEnumerable<GetGamesResponse>>
+    public class GetGamesHandler : BaseHandler<GetGamesQuery, GetGamesResponse>
     {
         public GetGamesHandler(IAppDbContext appDbContext, IAuthorizationService authorizationService) : base(appDbContext, authorizationService)
         {
         }
 
-        public async override Task<IEnumerable<GetGamesResponse>> Handle(GetGamesQuery request, CancellationToken cancellationToken)
+        public async override Task<GetGamesResponse> Handle(GetGamesQuery request, CancellationToken cancellationToken)
         {
             _authorizationService.AuthorizationCheck(Constants.RoleType.User);
 
@@ -30,14 +30,20 @@ namespace GameScheduler.BLL.Handlers.GameHandlers
             var list = await OrderGamesBySelected(filter, request.FilterByTime)
                 .Skip(request.PageSize * (request.PageNumber - 1))
                 .Take(request.PageSize)
-                .Select(x => new GetGamesResponse()
+                .Select(x => new GetGamesResponseItem()
                 {
                     Name = x.Name,
                     Id = x.Id,
                     DateTime = x.DateTime,
                 }).ToListAsync(cancellationToken);
 
-            return list;
+            return new GetGamesResponse
+            {
+                Items = list,
+                PreviousPageExist = request.PageNumber > 1,
+                NextPageExist = number > request.PageSize * request.PageNumber,
+                History = request
+            };
         }
 
         private static IOrderedQueryable<Game> OrderGamesBySelected(IQueryable<Game> query, bool orderByTime) =>

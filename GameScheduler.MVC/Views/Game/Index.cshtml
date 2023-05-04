@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GameScheduler.BLL.Models.GameModels.GetGamesResponse>
+﻿@model GameScheduler.BLL.Models.GameModels.GetGamesResponse
 
 @{
     ViewData["Title"] = "Games";
@@ -19,16 +19,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Items.First().Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTime)
+                @Html.DisplayNameFor(model => model.Items.First().DateTime)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Items) {
         <tr>
 
             <td>
@@ -46,3 +46,28 @@
 }
     </tbody>
 </table>
+
+@if (Model.PreviousPageExist)
+{
+    @Html.ActionLink("Index", "<<", new{
+        name=Model.History.Name,
+        minDateTime=Model.History.MinDateTime,
+        maxDateTime=Model.History.MaxDateTime,
+        filterByTime = Model.History.FilterByTime,
+        pageSize = Model.History.PageSize,
+        pageNumber = Model.History.PageNumber - 1
+    } )
+}
+@if (Model.NextPageExist)
+{
+    @Html.ActionLink("Index", ">>", new{
+        name=Model.History.Name,
+        minDateTime=Model.History.MinDateTime,
+        maxDateTime=Model.History.MaxDateTime,
+        filterByTime = Model.History.FilterByTime,
+        pageSize = Model.History.PageSize,
+        pageNumber = Model.History.PageNumber + 1
+    } )
+}
+
+
