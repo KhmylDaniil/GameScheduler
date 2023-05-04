@@ -2,7 +2,7 @@
 
 namespace GameScheduler.BLL.Models.GameModels
 {
-    public class CreateGameCommand : IRequest<Unit>
+    public class CreateGameCommand : IRequest<Guid>
     {
         public string Name { get; set; }
 

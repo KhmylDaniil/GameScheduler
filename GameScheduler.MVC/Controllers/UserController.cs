@@ -3,9 +3,11 @@ using GameScheduler.BLL.Models.UserModels;
 using GameScheduler.BLL.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GameScheduler.MVC.Controllers
 {
+    [Authorize]
     public class UserController : BaseController
     {
         public UserController(IMediator mediator) : base(mediator)

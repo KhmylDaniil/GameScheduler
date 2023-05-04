@@ -1,8 +1,6 @@
-﻿using MediatR;
-
-namespace GameScheduler.BLL.Models.GameModels
+﻿namespace GameScheduler.BLL.Models.GameModels
 {
-    public class EditGameCommand : IRequest<Unit>
+    public class GetGameByIdResponse
     {
         public Guid Id { get; set; }
 
@@ -12,6 +10,6 @@ namespace GameScheduler.BLL.Models.GameModels
 
         public DateTime DateTime { get; set; }
 
-        public List<Guid> Users { get; set; }
+        public Dictionary<Guid, string> Users { get; set; }
     }
 }

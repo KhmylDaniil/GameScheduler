@@ -31,7 +31,7 @@ namespace GameScheduler.BLL.Handlers.UserHandlers
             var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
                 ?? throw new EntityNotFoundException<User>(request.Id);
 
-            if (_appDbContext.Users.Any(x => x.Name == request.Name && x.Id != user.Id))
+            if (await _appDbContext.Users.AnyAsync(x => x.Name == request.Name && x.Id != user.Id))
                 throw new RequestValidationException("Выбранное имя уже используется.");
 
             user.Name = request.Name;

@@ -12,7 +12,7 @@ namespace GameScheduler.BLL.Handlers.UserHandlers
 
         public async override Task<IEnumerable<GetUserResponse>> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            _authorizationService.AuthorizationCheck(Constants.RoleType.Admin);
+            _authorizationService.AuthorizationCheck(Constants.RoleType.User);
 
             var filter = _appDbContext.Users
                 .Where(u => request.Name == null || u.Name.Contains(request.Name, StringComparison.InvariantCultureIgnoreCase));

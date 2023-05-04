@@ -2,8 +2,6 @@
 using GameScheduler.DAL;
 using GameScheduler.BLL.Services;
 using GameScheduler.BLL.Abstractions;
-using GameScheduler.BLL.Exceptions;
-using System.Reflection;
 using GameScheduler.BLL;
 
 namespace GameScheduler.MVC
@@ -23,6 +21,10 @@ namespace GameScheduler.MVC
             services.AddTransient<IUserContext, UserContext>();
 
             services.AddBLLServices(configuration);
+
+            services.AddAutoMapper(typeof(Program));
+
+            services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromSeconds(600));
         }
     }
 }

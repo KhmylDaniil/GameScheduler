@@ -1,4 +1,5 @@
 ﻿using GameScheduler.BLL.Abstractions;
+using GameScheduler.BLL.Entities;
 using GameScheduler.BLL.Exceptions;
 using GameScheduler.BLL.Models.GameModels;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,6 @@ namespace GameScheduler.BLL.Handlers.GameHandlers
 {
     public class GetGamesHandler : BaseHandler<GetGamesQuery, IEnumerable<GetGamesResponse>>
     {
-        private readonly IDateTimeProvider _timeProvider;
         public GetGamesHandler(IAppDbContext appDbContext, IAuthorizationService authorizationService) : base(appDbContext, authorizationService)
         {
         }
@@ -25,12 +25,11 @@ namespace GameScheduler.BLL.Handlers.GameHandlers
             var filter = _appDbContext.Games.Where(g => (request.Name == null || g.Name.Contains(request.Name))
                 && g.DateTime >= request.MinDateTime && g.DateTime <= request.MaxDateTime);
 
-            //Func<Game, TKey> selector = 
+            var number = await filter.CountAsync(cancellationToken);
 
-            var list = await filter
-                .OrderBy(g => request.Name)
-                //.Skip(request.PageSize * (request.PageNumber - 1))
-                //.Take(request.PageSize)
+            var list = await OrderGamesBySelected(filter, request.FilterByTime)
+                .Skip(request.PageSize * (request.PageNumber - 1))
+                .Take(request.PageSize)
                 .Select(x => new GetGamesResponse()
                 {
                     Name = x.Name,
@@ -41,6 +40,7 @@ namespace GameScheduler.BLL.Handlers.GameHandlers
             return list;
         }
 
-        //private Func<>
+        private static IOrderedQueryable<Game> OrderGamesBySelected(IQueryable<Game> query, bool orderByTime) =>
+            orderByTime ? query.OrderBy(x => x.DateTime) : query.OrderBy(x => x.Name);
     }
 }

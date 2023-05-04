@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace GameScheduler.BLL.Entities
 {
@@ -15,13 +16,21 @@ namespace GameScheduler.BLL.Entities
         }
 
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } 
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.UtcNow;
 
-        public List<User> Users { get; set; }
+        public List<User> Users { get; set; } = new();
+
+        internal void ChangeGame(string name, string description, DateTime dateTime, List<User> users)
+        {
+            Name = name;
+            Description = description;
+            DateTime = dateTime;
+            Users = users;
+        }
     }
 }

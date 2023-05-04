@@ -7,39 +7,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameScheduler.BLL.Handlers.GameHandlers
 {
-    public class CreateGameHandler : BaseHandler<CreateGameCommand, Guid>
+    public class EditGameHandler : BaseHandler<EditGameCommand, Unit>
     {
         private readonly IDateTimeProvider _dateTimeProvider;
-
-        public CreateGameHandler(
+        public EditGameHandler(
             IAppDbContext appDbContext,
             IAuthorizationService authorizationService,
-            IDateTimeProvider dateTimeProvider)
-            : base(appDbContext, authorizationService)
+            IDateTimeProvider dateTimeProvider) : base(appDbContext, authorizationService)
         {
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public async override Task<Guid> Handle(CreateGameCommand request, CancellationToken cancellationToken)
+        public async override Task<Unit> Handle(EditGameCommand request, CancellationToken cancellationToken)
         {
             _authorizationService.AuthorizationCheck(Constants.RoleType.User);
 
+            var game = await _appDbContext.Games.Include(g => g.Users).FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+                ?? throw new EntityNotFoundException<Game>(request.Id);
+
             var users = await CheckAndFormData(request, cancellationToken);
 
-            var newGame = new Game(
+            game.ChangeGame(
                 name: request.Name,
                 description: request.Description,
                 dateTime: request.DateTime,
                 users: users);
 
-            _appDbContext.Games.Add(newGame);
             await _appDbContext.SaveChangesAsync(cancellationToken);
-            return newGame.Id;
+            return Unit.Value;
         }
 
-        private async Task<List<User>> CheckAndFormData(CreateGameCommand request, CancellationToken cancellationToken)
+        private async Task<List<User>> CheckAndFormData(EditGameCommand request, CancellationToken cancellationToken)
         {
-            if(await _appDbContext.Games.AnyAsync(x => x.Name == request.Name, cancellationToken))
+            if (await _appDbContext.Games.AnyAsync(x => x.Name == request.Name && x.Id != request.Id, cancellationToken))
                 throw new RequestValidationException("Игра с таким названием уже есть");
 
             if (request.DateTime < _dateTimeProvider.Now)
