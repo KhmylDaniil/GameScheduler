@@ -1,10 +1,16 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using GameScheduler.MVC.Localization;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IHtmlLocalizer<LocalizedResources> SharedLocalizer
+
+@{
+    ViewData["Title"] = @SharedLocalizer["HomePageTitle"];
 }
 
+<h4>@SharedLocalizer["HomePageWelcome"]</h4>
+
 <div class="text-center">
-    <a asp-controller="User" asp-action="Index">User Management</a>
+    <a asp-controller="User" asp-action="Index">@SharedLocalizer["HomePageUserManagement"]</a>
 </div>
 <div class="text-center">
-    <a asp-controller="Game" asp-action="Index">Games Management</a>
+    <a asp-controller="Game" asp-action="Index">@SharedLocalizer["HomePageGameManagement"]</a>
 </div>

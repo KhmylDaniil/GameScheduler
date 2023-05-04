@@ -49,7 +49,7 @@
 
 @if (Model.PreviousPageExist)
 {
-    @Html.ActionLink("Index", "<<", new{
+    @Html.ActionLink("<<", "Index", new{
         name=Model.History.Name,
         minDateTime=Model.History.MinDateTime,
         maxDateTime=Model.History.MaxDateTime,
@@ -60,7 +60,7 @@
 }
 @if (Model.NextPageExist)
 {
-    @Html.ActionLink("Index", ">>", new{
+    @Html.ActionLink(">>", "Index", new{
         name=Model.History.Name,
         minDateTime=Model.History.MinDateTime,
         maxDateTime=Model.History.MaxDateTime,

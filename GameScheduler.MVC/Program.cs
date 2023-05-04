@@ -9,6 +9,8 @@ Startup.ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 
+app.UseRequestLocalization();
+
 Entry.MigrateDB(app.Services);
 
 // Configure the HTTP request pipeline.
