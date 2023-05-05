@@ -1,4 +1,6 @@
-﻿namespace GameScheduler.BLL.Models.GameModels
+﻿using GameScheduler.BLL.Entities;
+
+namespace GameScheduler.BLL.Models.GameModels
 {
     public class GetGameByIdResponse
     {
@@ -11,5 +13,7 @@
         public DateTime DateTime { get; set; }
 
         public Dictionary<Guid, string> Users { get; set; }
+
+        public List<GameFile> GameFiles { get; set; }
     }
 }

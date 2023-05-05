@@ -16,7 +16,10 @@ namespace GameScheduler.BLL.Handlers.GameHandlers
         {
             _authorizationService.AuthorizationCheck(Constants.RoleType.User);
 
-            var game = await _appDbContext.Games.Include(g => g.Users).FirstOrDefaultAsync(x => x.Id == request.Id)
+            var game = await _appDbContext.Games
+                .Include(g => g.Users)
+                .Include(g => g.GameFiles)
+                .FirstOrDefaultAsync(x => x.Id == request.Id)
                 ?? throw new EntityNotFoundException<Game>(request.Id);
 
             return new GetGameByIdResponse
@@ -25,7 +28,8 @@ namespace GameScheduler.BLL.Handlers.GameHandlers
                 Name = game.Name,
                 Description = game.Description,
                 DateTime = game.DateTime,
-                Users = game.Users.ToDictionary(x => x.Id, x => x.Name)
+                Users = game.Users.ToDictionary(x => x.Id, x => x.Name),
+                GameFiles = game.GameFiles
             };
         }
     }

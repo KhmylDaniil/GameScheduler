@@ -4,6 +4,7 @@ using GameScheduler.BLL.Exceptions;
 using GameScheduler.BLL.Models.GameModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace GameScheduler.BLL.Handlers.GameHandlers
 {

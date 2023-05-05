@@ -20,6 +20,8 @@ namespace GameScheduler.BLL.Handlers.GameHandlers
             var game = await _appDbContext.Games.Include(g => g.Users).FirstOrDefaultAsync(x => x.Id == request.Id)
                 ?? throw new EntityNotFoundException<Game>(request.Id);
 
+            game.DeleteStorageFolder();
+
             _appDbContext.Games.Remove(game);
             await _appDbContext.SaveChangesAsync(cancellationToken);
             return Unit.Value;

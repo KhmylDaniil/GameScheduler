@@ -51,6 +51,36 @@
     </tbody>
 </table>
 
+<p>
+    <a asp-controller="GameFile" asp-action="Create" asp-route-gameId=@Model.Id>Add Game File</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <h4>Game Files</h4>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.GameFiles)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a href="@item.Path">текст ссылки</a>
+                       | <a asp-controller="GameFile" asp-action="Delete" asp-route-gameId=@Model.Id asp-route-name=@Model.Name>Delete</a>
+                    </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>@TempData["ErrorMessage"]</p>
+
 <div>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     <a asp-action="Index">Back to List</a>

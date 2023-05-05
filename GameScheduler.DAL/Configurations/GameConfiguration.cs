@@ -15,6 +15,12 @@ namespace GameScheduler.DAL.Configurations
             builder.HasMany(g => g.Users)
                 .WithMany(u => u.Games)
                 .UsingEntity(x => x.ToTable("UserGames"));
+
+            builder.OwnsMany(g => g.GameFiles)
+                .Property(gf => gf.Name).IsRequired();
+
+            builder.OwnsMany(g => g.GameFiles)
+                .Property(gf => gf.Path).IsRequired();
         }
     }
 }
